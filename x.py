@@ -73,6 +73,12 @@ while running :
 		pygame.draw.circle(screen , ball_color , ball_pos,ball_radius )
 		# pygame.draw.circle(screen , ball_color , (int(ball_pos[0]),int(ball_pos[1])),ball_radius )
 
+        try:
+            ball_pos = (ball_pos[0] + ball_velocity[0] , ball_pos[1] + ball_velocity[1])
+            ball_velocity = (ball_velocity[0], ball_velocity[1] + gravity)
+        except UnboundLocalError:
+            pass
+
 	pygame.display.flip()
 	clock.tick()
 

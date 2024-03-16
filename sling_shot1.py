@@ -64,17 +64,23 @@ while running :
 				
 		if is_pulling_back :
 			mouse_pos = pygame.mouse.get_pos()
-			pull_back_distace = min((math.sqrt((mouse_pos[0] - Slingshot_pos[0] **2 +( mouse_pos[1] - Slingshot_pos[1] **2)),pull_back_length)))
-			angle = math.degrees((math.math.atan(Slingshot_pos[1] - mouse_pos [1] , Slingshot_pos[0] - mouse_pos[0])))
+			pull_back_distace = min((math.sqrt((mouse_pos[0] - Slingshot_pos[0]) **2 +( mouse_pos[1] - Slingshot_pos[1]) **2)),pull_back_length)
+			angle = math.degrees((math.atan2(Slingshot_pos[1] - mouse_pos [1] , Slingshot_pos[0] - mouse_pos[0])))
 
 		pygame.draw.circle(screen , black ,Slingshot_pos ,Slingshot_redius)
-		pygame.draw.line(screen , black , Slingshot_pos , (Slingshot_pos + pull_back_distace + math.cos(math.radians(angle)) , Slingshot_pos[1] + pull_back_distace[1] + math.sin(math.radians(angle))),2)
+		pygame.draw.line(screen , black , Slingshot_pos , (Slingshot_pos[0] + pull_back_distace + math.cos(math.radians(angle)) , Slingshot_pos[1] + pull_back_distace + math.sin(math.radians(angle))),2)
 		
 		pygame.draw.circle(screen , ball_color , ball_pos,ball_radius )
 		# pygame.draw.circle(screen , ball_color , (int(ball_pos[0]),int(ball_pos[1])),ball_radius )
 
-	pygame.display.flip()
-	clock.tick()
+        try:
+            ball_pos = (ball_pos[0] + ball_velocity[0] , ball_pos[1] + ball_velocity[1])
+            ball_velocity = (ball_velocity[0], ball_velocity[1] + GRAVITY)
+        except NameError :
+            pass
+
+pygame.display.flip()
+clock.tick()
 
 pygame.quit()
 

@@ -1,80 +1,62 @@
-
 import pygame
 
-stat = pygame.init()
+# Initialize Pygame
+pygame.init()
 
-# print(stat)
+# Set up the window
+window_size = (500, 500)
+window = pygame.display.set_mode(window_size)
+pygame.display.set_caption("Damped Oscillation")
 
-window_1 = pygame.display.set_mode((500,500))
+# Set up clock
+clock = pygame.time.Clock()
 
-#apne game mein time ki bachodi na ho isliye...
-clock_bahi = pygame.time.Clock()
+# Colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 
-#tuime passed between two frames..
-dt = 0
-speed = pygame.Vector2( 0, 100)
+# Ball properties
+ball_radius = 25
+ball_pos = [window_size[0] // 2, window_size[1] // 2]
+ball_speed = [0, 0]  # Initial speed
+gravity = 0.5
+damping_factor = 0.99
 
-#window khuli rakhne ke liye...
+# Main loop
 running = True
+while running:
+    # Handle events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
-col = "white"
-temp = 1
+    # Apply gravity
+    ball_speed[1] += gravity
 
-player_pos = pygame.Vector2(window_1.get_width()/2, window_1.get_height()/2)
+    # Update ball position
+    ball_pos[0] += ball_speed[0]
+    ball_pos[1] += ball_speed[1]
 
-while running and temp != 0:
+    # Check boundaries
+    if ball_pos[1] >= window_size[1] - ball_radius:
+        # Reverse vertical speed and apply damping
+        ball_speed[1] *= -damping_factor
+        print(ball_speed[1])
+        
 
-	window_1.fill("black")
+    
 
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			running = False
+    # Fill background
+    window.fill(BLACK)
 
-	player_pos += speed * dt
-	gola = pygame.draw.circle(window_1,col,player_pos,50)
+    # Draw ball
+    pygame.draw.circle(window, WHITE, (int(ball_pos[0]), int(ball_pos[1])), ball_radius)
 
-	
-	if player_pos.y >= window_1.get_height() -50 :
-		speed.y *= (speed.y*(-1)) - temp
+    # Update display
+    pygame.display.flip()
 
-		# col = "Green"
-	elif player_pos.y <= 50 :
-		speed.y = (speed.y*(-1)) - temp
+    # Cap the frame rate
+    clock.tick(60)
 
-
-	temp -= 0.25
-		# col = "Blue"
-	# elif player_pos.x >= window_1.get_height() -50 :
-	# 	speed.x *= -1
-		# col = "red"
-	# elif player_pos.x <= 50 :
-	# 	speed.x *= -1
-		# col = "yellow"
-
-	# keys = pygame.key.get_pressed()
-	# if keys[pygame.K_w]:
-	# 	player_pos.y -= 300 * dt
-	# if keys[pygame.K_s]:
-	# 	player_pos.y += 300 * dt
-	# if keys[pygame.K_a]: 
-	# 	player_pos.x -= 300*dt
-	# if keys[pygame.K_d]:
-	# 	player_pos.x += 300*dt
-
-
-	if player_pos.x >= (window_1.get_width() + (50)):
-		player_pos.x = 0 - 50
-	
-
-	# if keys[pygame.K_q]:
-	# 	# quit()
-	# 	running = False # or we can do  this
-
-
-	#flip the screen ...
-	pygame.display.flip()
-
-	dt = clock_bahi.tick(60)/1000
-	print(dt)
-	
+# Quit Pygame
 pygame.quit()
